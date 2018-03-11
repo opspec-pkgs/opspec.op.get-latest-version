@@ -3,6 +3,8 @@ description: gets the latest version of an opspec op
 inputs:
   opRef:
     string:
+      constraints:
+        minLength: 1
       description: reference to the op; formatted as `host/path/repo#tag`
 outputs:
   latestVersion:
@@ -33,22 +35,23 @@ run:
           dotGitDir: $(repo/.git)
         outputs:
           tags:
-    # @TODO: replace w/ official array.map op
-    - container:
-        image: { ref: 'node:9.5.0-alpine' }
-        cmd: [node, /array.map.js]
-        files:
-          /array.map.js:
-          /tags.json: $(tags)
+    - op:
+        pkg: { ref: github.com/opspec-pkgs/jmespath.query.eval-array#1.0.0 }
+        inputs:
+          array: $(tags)
+          query: '[*].name'
+        outputs:
+          tags: array
     - op:
         pkg: { ref: github.com/opspec-pkgs/semver.v2.sort#1.0.0 }
-        inputs: { semVers: $(tags) }
-        outputs: { semVers: }
-    # @TODO: replace w/ official array.pop op
-    - container:
-        image: { ref: 'node:9.5.0-alpine' }
-        cmd: [node, /array.pop.js]
-        files:
-          /array.pop.js:
-          /semVers.json: $(semVers)
-          /latestVersion: $(latestVersion)
+        inputs:
+          semVers: $(tags)
+        outputs:
+          semVers:
+    - op:
+        pkg: { ref: github.com/opspec-pkgs/jmespath.query.eval-array-to-string#1.0.0 }
+        inputs:
+          array: $(semVers)
+          query: '[0]'
+        outputs:
+          latestVersion: string
