@@ -1,0 +1,54 @@
+name: github.com/opspec-pkgs/opspec.op.get-latest-version
+description: gets the latest version of an opspec op
+inputs:
+  opRef:
+    string:
+      description: reference to the op; formatted as `host/path/repo#tag`
+outputs:
+  latestVersion:
+    string:
+      constraints:
+        format: semver
+      description: latest version of the op
+version: 1.0.0
+run:
+  serial:
+    - op:
+        pkg: { ref: github.com/opspec-pkgs/url.parse#1.0.0 }
+        inputs:
+          url: https://$(opRef)
+        outputs:
+          parsedOpRef: url
+    - op:
+        pkg: { ref: github.com/opspec-pkgs/git.repo.clone-https#1.0.0 }
+        inputs:
+          username: ' '
+          password: ' '
+          url: $(parsedOpRef.origin)$(parsedOpRef.pathname)
+        outputs:
+          repo:
+    - op:
+        pkg: { ref: github.com/opspec-pkgs/git.repo.tags.list#1.0.0 }
+        inputs:
+          dotGitDir: $(repo/.git)
+        outputs:
+          tags:
+    # @TODO: replace w/ official array.map op
+    - container:
+        image: { ref: 'node:9.5.0-alpine' }
+        cmd: [node, /array.map.js]
+        files:
+          /array.map.js:
+          /tags.json: $(tags)
+    - op:
+        pkg: { ref: github.com/opspec-pkgs/semver.v2.sort#1.0.0 }
+        inputs: { semVers: $(tags) }
+        outputs: { semVers: }
+    # @TODO: replace w/ official array.pop op
+    - container:
+        image: { ref: 'node:9.5.0-alpine' }
+        cmd: [node, /array.pop.js]
+        files:
+          /array.pop.js:
+          /semVers.json: $(semVers)
+          /latestVersion: $(latestVersion)
