@@ -30,7 +30,9 @@ opctl run github.com/opspec-pkgs/opspec.op.get-latest-version#1.0.0
 op:
   pkg: { ref: github.com/opspec-pkgs/opspec.op.get-latest-version#1.0.0 }
   inputs:
-    opRef:
+    ref:
+    # params w/ default
+    pullCreds:
   outputs:
     latestVersion:
 ```

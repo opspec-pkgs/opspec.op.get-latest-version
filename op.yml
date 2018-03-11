@@ -1,11 +1,23 @@
 name: github.com/opspec-pkgs/opspec.op.get-latest-version
 description: gets the latest version of an opspec op
 inputs:
-  opRef:
+  ref:
     string:
       constraints:
         minLength: 1
       description: reference to the op; formatted as `host/path/repo#tag`
+  pullCreds:
+    object:
+      description: creds object used to auth w/ the source of the operation
+      constraints:
+        properties:
+          username:
+            minLength: 1
+          password:
+            minLength: 1
+      default:
+        username: ' '
+        password: ' '
 outputs:
   latestVersion:
     string:
@@ -18,15 +30,15 @@ run:
     - op:
         pkg: { ref: github.com/opspec-pkgs/url.parse#1.0.0 }
         inputs:
-          url: https://$(opRef)
+          url: https://$(ref)
         outputs:
-          parsedOpRef: url
+          parsedRef: url
     - op:
         pkg: { ref: github.com/opspec-pkgs/git.repo.clone-https#1.0.0 }
         inputs:
-          username: ' '
-          password: ' '
-          url: $(parsedOpRef.origin)$(parsedOpRef.pathname)
+          username: $(pullCreds.username)
+          password: $(pullCreds.password)
+          url: $(parsedRef.origin)$(parsedRef.pathname)
         outputs:
           repo:
     - op:
