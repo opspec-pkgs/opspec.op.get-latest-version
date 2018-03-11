@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/opspec-pkgs/opspec.op.get-latest-version.svg?branch=master)](https://travis-ci.org/opspec-pkgs/opspec.op.get-latest-version)
 
+<img src="icon.svg" alt="icon" height="100px">
+
 # Problem statement
 
 gets the latest version of an opspec op
