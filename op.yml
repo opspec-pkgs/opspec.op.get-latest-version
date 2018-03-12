@@ -67,3 +67,6 @@ run:
           query: '[0]'
         outputs:
           latestVersion: string
+    - container:
+        image: { ref: alpine }
+        cmd: [echo, $(latestVersion)]
