@@ -48,12 +48,12 @@ run:
         outputs:
           tags:
     - op:
-        pkg: { ref: github.com/opspec-pkgs/jmespath.query.eval-array#1.0.0 }
+        pkg: { ref: github.com/opspec-pkgs/jmespath.query.evaluate#1.0.0 }
         inputs:
-          array: $(tags)
+          data: $(tags)
           query: '[*].name'
         outputs:
-          tags: array
+          tags: result
     - op:
         pkg: { ref: github.com/opspec-pkgs/semver.v2.sort#1.0.0 }
         inputs:
@@ -61,12 +61,12 @@ run:
         outputs:
           semVers:
     - op:
-        pkg: { ref: github.com/opspec-pkgs/jmespath.query.eval-array-to-string#1.0.0 }
+        pkg: { ref: github.com/opspec-pkgs/jmespath.query.evaluate#1.0.0 }
         inputs:
-          array: $(semVers)
+          data: $(semVers)
           query: '[0]'
         outputs:
-          latestVersion: string
+          latestVersion: result
     - container:
         image: { ref: alpine }
         cmd: [echo, $(latestVersion)]
