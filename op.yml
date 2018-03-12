@@ -64,7 +64,7 @@ run:
         pkg: { ref: github.com/opspec-pkgs/jmespath.query.evaluate#1.0.0 }
         inputs:
           data: $(semVers)
-          query: '[0]'
+          query: '[-1]'
         outputs:
           latestVersion: result
     - container:
