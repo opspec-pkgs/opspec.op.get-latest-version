@@ -1,5 +1,5 @@
 name: github.com/opspec-pkgs/opspec.op.get-latest-version
-description: gets the latest version of an opspec op
+description: gets the latest version of an [opspec](https://opspec.io) op
 inputs:
   ref:
     string:

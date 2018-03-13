@@ -4,7 +4,7 @@
 
 # Problem statement
 
-gets the latest version of an opspec op
+gets the latest version of an [opspec](https://opspec.io) op
 
 # Format
 
