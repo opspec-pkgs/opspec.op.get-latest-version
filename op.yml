@@ -24,17 +24,17 @@ outputs:
       constraints:
         format: semver
       description: latest version of the op
-version: 1.0.0
+version: 2.0.0
 run:
   serial:
     - op:
-        pkg: { ref: github.com/opspec-pkgs/url.parse#1.0.0 }
+        ref: github.com/opspec-pkgs/url.parse#1.0.0
         inputs:
           url: https://$(ref)
         outputs:
-          parsedRef: url
+          url: $(parsedRef)
     - op:
-        pkg: { ref: github.com/opspec-pkgs/git.repo.clone-https#1.0.0 }
+        ref: github.com/opspec-pkgs/git.repo.clone-https#1.0.0
         inputs:
           username: $(pullCreds.username)
           password: $(pullCreds.password)
@@ -42,28 +42,28 @@ run:
         outputs:
           repo:
     - op:
-        pkg: { ref: github.com/opspec-pkgs/git.repo.tags.list#1.0.0 }
+        ref: github.com/opspec-pkgs/git.repo.tags.list#1.0.0
         inputs:
           dotGitDir: $(repo/.git)
         outputs:
           tags:
     - op:
-        pkg: { ref: github.com/opspec-pkgs/jmespath.query.evaluate#1.0.0 }
+        ref: github.com/opspec-pkgs/jmespath.query.evaluate#1.0.0
         inputs:
           data: $(tags)
           query: '[*].name'
         outputs:
-          tags: result
+          result: $(tags)
     - op:
-        pkg: { ref: github.com/opspec-pkgs/semver.v2.sort#1.0.0 }
+        ref: github.com/opspec-pkgs/semver.v2.sort#1.0.0
         inputs:
           semVers: $(tags)
         outputs:
           semVers:
     - op:
-        pkg: { ref: github.com/opspec-pkgs/jmespath.query.evaluate#1.0.0 }
+        ref: github.com/opspec-pkgs/jmespath.query.evaluate#1.0.0
         inputs:
           data: $(semVers)
           query: '[-1]'
         outputs:
-          latestVersion: result
+          result: $(latestVersion)
