@@ -5,4 +5,10 @@ All notable changes will be documented in this file in accordance with
 
 ## \[Unreleased]
 
+## \[2.0.0] - 2021-08-05
+
+### Changed
+
+- remove use of deprecated opspec syntax
+
 ## \[1.0.0] 2018-03-11
